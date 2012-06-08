@@ -1,0 +1,41 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+
+	var socket = io.connect('http://localhost:8000');
+	
+	socket.on('connect', function(){
+		socket.emit('get_job');
+	});
+
+	socket.on('map', function(job_nr_left, timesEach){
+        $('#log').html(job_nr_left);
+        sum = 0
+        for(i = 0; i < 1000000; i++){
+			timesEach[i] = 1;
+		}
+        for(var x in timesEach){
+        	sum += timesEach[x] * 2; 
+        }
+        socket.emit('submit_map_job', sum);
+	});
+
+	socket.on('reduce', function(reduce_jobs){
+		var sum = 0;
+        for(i = 0; i < reduce_jobs.length; i++){
+        	sum += parseInt(reduce_jobs[i]);
+        }
+        socket.emit('finalize', sum);
+	});
+
+	socket.on('done', function(result){
+		$('#log').html('the result of the job is ' + result);
+	})
+
+	$(function(){
+		//on page load
+	});
+</script>
+<div id='log'>
+	
+</div>
