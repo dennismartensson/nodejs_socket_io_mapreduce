@@ -1,10 +1,13 @@
 var app = require('express').createServer()
 var io = require('socket.io').listen(app);
 
-app.listen(8000);
+app.listen(80);
+
+var path = document.location.pathname;
+var dir = path.substring(path.indexOf('/', 1)+1, path.lastIndexOf('/'));
 
 app.get('/', function (req, res) {
-	res.sendfile('/Users/dennis/developing/hacker_school/nodejs_mapreduce/index.html');
+	res.sendfile(dir+'/index.html');
 });
 
 var timesEach = [1]
